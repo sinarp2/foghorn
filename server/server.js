@@ -17,11 +17,11 @@ app.post('/post-to-me', function (req, res) {
   res.send(`You sent: ${body} to Express`)
 })
  
-// Tell our app to listen on port 8080
-app.listen(8080, function (err) {
+// Tell our app to listen on port 8001
+app.listen(8001, function (err) {
   if (err) {
     throw err
   }
  
-  console.log('Server started on port 8080')
+  console.log('Server started on port 8001')
 })

@@ -1,16 +1,265 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+import os
 import time
 import csv
 import requests
+import logging
+import threading
+
+from foghorn_sdk.health_status import HealthStatus
+from foghorn_sdk.fhapplication import FHApplication
+from foghorn_sdk.health_report import HealthReport
+from foghorn_sdk.new_configuration_event import NewConfigurationEvent
+from foghorn_sdk.system_event import SystemEvent
+from foghorn_sdk.fhclient import FHClient
+from foghorn_sdk.logger import Logger
+from foghorn_sdk.new_topic_event import NewTopicEvent
+from foghorn_sdk.schema_type import SchemaType
+from foghorn_sdk.topic_data_handler import TopicDataHandler
+from foghorn_sdk.system_event_handler import SystemEventHandler
 
 '''
 pip install requests
 '''
 
+class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport, threading.Thread):
+
+    __client_id = "com_acme_best_app_1"
+    __app_id = '100.200-100-FF'
+    __app_name = 'com_acme_best_app_1'
+    __app_author = 'acme'
+    __app_version = '1.0'
+    __db_user = ''
+    __db_passwd = ''
+    __db_name = 'TestDb'
+
+    def __init__(self):
+
+        self.message_count_received = 0
+        self.topic = None
+        threading.Thread.__init__(self)
+
+        # create client
+        self.client = FHClient(self)
+
+        self.create_topic()
+
+        self.client.subscribe_system_events(self)
+
+        # get list of topics.
+        self.topics = self.client.get_topics()
+        self.log_topics()
+
+        # subscribe to topics
+        self.client.add_topic_subscriber(self.topics, self)
+
+        self.daemon = True
+        self.start()
+
+    def get_id(self):
+        return self.__app_id
+
+    def get_name(self):
+        return self.__app_name
+
+    def get_author(self):
+        return self.__app_author
+
+    def get_version(self):
+        return self.__app_version
+
+    def shutdown(self):
+        if self.client is not None:
+            self.client.close()
+
+    def get_health_data(self):
+        return HealthStatus.running
+
+    def on_system_event(self, event):
+        """
+        on_system_event is the the implementation of the SystemEventHandler abstract class.
+        SDK calls this method when there is a new system event.
+        :param event: is the system event.
+        :return: nothing.
+        """
+        if isinstance(event, NewTopicEvent):
+            name = event.get_topic().get_name()
+            id_ = event.get_topic().get_id()
+            self.client.get_logger().log_debug("sample_app.on_system_event NewTopicEvent: " + name + "  " + id_)
+
+            # Subscribe to receive data from the new sensor.
+            sensors = [event.get_topic()];
+            self.client.add_topic_subscriber(sensors, self)
+        elif isinstance(event, NewConfigurationEvent):
+            self.client.get_logger().log_debug("sample_app.on_system_event NewConfigurationEvent")
+        elif isinstance(event, SystemEvent):
+            self.client.get_logger().log_debug("sample_app.on_system_event SystemEvent type = " + str(event.get_type()) +
+                                               " id = " + str(event.get_id()))
+
+    def on_topic_data(self, topic_data):
+        """
+        on_topic_data is implementation of the TopicDataHandler abstract class.
+        SDK calls this method when there is a message (data) available for one
+        of the topics the application has subscribed to.
+        :param topic_data: New data available on a specific topic
+        :return: nothing
+        """
+        name = topic_data.get_topic().get_name()
+        if topic_data.get_data() is not None:
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " + str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
+        else:
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " + str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
+
+        self.message_count_received += 1
+
+    def run(self):
+
+        index = 0
+        while True:
+            try:
+                self.client.publish_data(self.topic, "hello world " + str(index))
+                index = index + 1
+                time.sleep(1)
+            except Exception as e:
+                self.client.get_logger().log_error("sample_app.run error: ", e)
+                break
+
+    def query_database(self):
+        """
+        query_database method is an example code on to connect to the local TSDB and
+        query data. In this example, it is assumed that a database with "FoghornSampleApp" name exist.
+        :return:
+        """
+        try:
+            # get the database
+            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
+
+            # list the available databases.
+            dblist = tsdb.get_list_database()
+
+            if dblist is not None:
+                self.client.get_logger().log_debug("db count = " + str(len(dblist)))
+
+                # list series available in each database
+                for db in dblist:
+                    for key, dbname in db.iteritems():
+                        self.client.get_logger().log_debug("database name = " + str(dbname))
+                        if dbname == '_internal':
+                            continue
+
+                        measurements = tsdb.get_list_measurements(dbname)
+                        for measure in measurements:
+                            self.client.get_logger().log_debug("  measurement: " + str(measure))
+                            fields = tsdb.get_list_fields(measure, dbname)
+                            for field in fields:
+                                self.client.get_logger().log_debug("  field: " + str(field))
+
+                        series = tsdb.get_list_series(dbname)
+                        for serie in series:
+                            for key2, sname in serie.iteritems():
+                                if sname == self.__db_name:
+                                    result = tsdb.query("SELECT * FROM " + sname)
+                                    values = result.raw['series'][0]['values']
+                                    for item in values:
+                                        self.client.get_logger().log_debug("     " + str(item))
+        except Exception as e:
+            self.client.get_logger().log_debug("sample_app.query_database error: ", e)
+
+    def show_database_schema(self):
+        try:
+            # get the database object
+            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
+
+            # list the available databases.
+            dblist = tsdb.get_list_database()
+
+            if dblist is not None:
+                self.client.get_logger().log_debug("db count = " + str(len(dblist)))
+
+                # list measurements and fields available in each database
+                for db in dblist:
+                    for key, dbname in db.iteritems():
+
+                        self.client.get_logger().log_debug("database name = " + str(dbname))
+
+                        tsdb.switch_database(str(dbname))
+
+                        # measurements
+                        measurements = tsdb.get_list_measurements(dbname)
+                        for measure in measurements:
+                            self.client.get_logger().log_debug("    measurement: " + str(measure))
+
+                            # fields for each measurement
+                            fields = tsdb.get_list_fields(measure)
+                            for field in fields:
+                                self.client.get_logger().log_debug("        field: " + str(field))
+        except Exception as e:
+            self.client.get_logger().log_error("create_database failed", e)
+
+    def create_database(self):
+        try:
+            # get the database object
+            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
+            tsdb.create_database_with_rentention_policy(self.__db_name)
+        except Exception as e:
+            self.client.get_logger().log_error("create_database failed ", e)
+
+    def delete_database(self):
+        try:
+            # get the database object
+            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
+            tsdb.drop_database(self.__db_name)
+        except Exception as e:
+            self.client.get_logger().log_error("delete_database failed ", e)
+
+    def write_database(self):
+        tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
+        json_body = [
+            {
+                "measurement": "MyTable",
+                "tags": {
+                    "Vel_Version": "2.0"
+                },
+                "time": "2009-11-10T23:00:00Z",
+                "fields": {
+                    "pressure": 0.64,
+                    "temperature": 3.0,
+                }
+            }
+        ]
+        tsdb.write_points(json_body, database=self.__db_name)
+
+    def test_database(self):
+        self.create_database()
+        self.write_database()
+        self.query_database()
+        self.show_database_schema()
+
+    def create_topic(self):
+        """
+        Create a topic and publish some data.
+        :return:
+        """
+        try:
+            topic_id = "Foo-Python-100"
+            self.topic = self.client.get_topic(topic_id)
+            if self.topic is None:
+                topic_schema = "{\"type\":\"number\"}"
+                self.topic = self.client.create_topic(topic_schema, SchemaType.JSON, topic_id)
+        except Exception as e:
+            self.client.get_logger().log_error("create_topic failed ", e)
+
+    def log_topics(self):
+        self.client.get_logger().log_debug("topic count = " + str(len(self.topics)))
+        for index in range(len(self.topics)):
+            topic = self.topics[index]
+            self.client.get_logger().log_debug("topic name = " + topic.get_name() + " id = " + str(topic.get_id()))
+
 
 class Datafile:
     # __POST_ENDPOINT = 'http://charger.tetrapacific.com/api/api-collector.php'
-    __POST_URL = 'http://localhost:8080/post-to-me'
+    __POST_URL = 'http://localhost:8001/post-to-me'
 
     def __init__(self, filename):
         self.__file = open(filename, 'r')
@@ -66,11 +315,15 @@ class Datafile:
 
 
 def main():
+    Logger.path = os.getcwd() + "/sdk_log"
+    Logger.log_level = logging.DEBUG
+
     datafiles = []
     datafiles.append(Datafile('upload-foghorn-ac-10022001.csv'))
     datafiles.append(Datafile('upload-foghorn-dc-10011103.csv'))
     datafiles.append(Datafile('upload-foghorn-dc-10021101.csv'))
 
+    subs = Subscriber()
     while True:
         for datafile in datafiles:
             datafile.post_data()

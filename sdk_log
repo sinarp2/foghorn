@@ -1,0 +1,200 @@
+FHClient.__init__
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+Connection to EM failed, retrying..... 1 
+
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+Connection to EM failed, retrying..... 1 
+
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+Connection to EM failed, retrying..... 1 
+
+
+Connection to EM failed, retrying..... 2 
+
+
+Connection to EM failed, retrying..... 3 
+
+
+Connection to EM failed, retrying..... 4 
+
+
+Connection to EM failed, retrying..... 5 
+
+
+Connection to EM still failed, stop retrying.
+
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7f8a7b4ec6d0> @ tcp://127.0.0.1:8500
+
+Connection to EM failed, retrying..... 1 
+
+
+Connection to EM failed, retrying..... 2 
+
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+Connection to EM failed, retrying..... 1 
+
+
+Connection to EM failed, retrying..... 2 
+
+
+Connection to EM failed, retrying..... 3 
+
+
+Connection to EM failed, retrying..... 4 
+
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7f041cfe4738> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7f041cfe4c80> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7fb2b781a738> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7fb2b781ac80> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7f3bd8a48738> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7f3bd8a48c80> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7f8b2952b7a0> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7f8b2952bce8> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7ff8574757a0> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7ff857475ce8> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7ff1260ce7a0> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7ff1260cece8> @ tcp://127.0.0.1:9501
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7f5acd9887a0> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7f5acd988ce8> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.__init__
+ConfigurationManagerRest.create_client: swagger file/usr/local/lib/python2.7/dist-packages/foghorn_sdk/resources/swagger.yml
+ConfigurationManagerRest.create_client: connected @ http://127.0.0.1:8001/config/v1
+ConfigurationManagerRest.__init__
+DatabusManager.__init__
+DatabusManager.initialize
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_publisher socket <zmq.sugar.socket.Socket object at 0x7f09038297a0> @ tcp://127.0.0.1:8500
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getDescriptors). Either add a response specification for the status_code or use a `default` response.\n']
+DatabusManager.create_subscriber socket <zmq.sugar.socket.Socket object at 0x7f0903829ce8> @ tcp://127.0.0.1:9501
+DatabusManager.run start.
+FHClient.get_topic name = Foo-Python-100
+ConfigurationManagerRest.get_topic name = Foo-Python-100
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getTopics). Either add a response specification for the status_code or use a `default` response.\n']
+FHClient.get_topic failed. Error: ['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/fhclient.py", line 82, in get_topic\n    topic = self.__configurationManager.get_topic(name)\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/configuration_manager_rest.py", line 60, in get_topic\n    topic = self.l1l1111_opy_(name)\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/configuration_manager_rest.py", line 93, in l1l1111_opy_\n    topics = self.l111l1l_opy_()\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/configuration_manager_rest.py", line 91, in l111l1l_opy_\n    return run_with_retry(self.logger, self.client.Topic.getTopics(_request_options=self.request_options))\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 46, in run_with_retry\n    raise ex\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getTopics). Either add a response specification for the status_code or use a `default` response.\n']
+create_topic failed ['Traceback (most recent call last):\n', '  File "fh_send_data.py", line 116, in create_topic\n    self.topic = self.client.get_topic(topic_id)\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/fhclient.py", line 86, in get_topic\n    raise TopicException\n', 'TopicException\n']
+FHClient.get_topics
+ConfigurationManager.get_topics
+
+ Unexpected error encountered when run_with_retry, ex : 
+['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 31, in run_with_retry\n    result = l1llll1l_opy_.result()\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 56, in result\n    self.response_callbacks)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 99, in unmarshal_response\n    sys.exc_info()[2])\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado/http_future.py", line 94, in unmarshal_response\n    operation)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 94, in unmarshal_response\n    response_spec = get_response_spec(response.status_code, op)\n', '  File "/usr/local/lib/python2.7/dist-packages/bravado_core/response.py", line 145, in get_response_spec\n    "status_code or use a `default` response.".format(status_code, op))\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getTopics). Either add a response specification for the status_code or use a `default` response.\n']
+FHClient.get_topics failed. Error: ['Traceback (most recent call last):\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/fhclient.py", line 72, in get_topics\n    topics = self.__configurationManager.get_topics()\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/configuration_manager_rest.py", line 44, in get_topics\n    topics = self.l111l1l_opy_()\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/configuration_manager_rest.py", line 91, in l111l1l_opy_\n    return run_with_retry(self.logger, self.client.Topic.getTopics(_request_options=self.request_options))\n', '  File "/usr/local/lib/python2.7/dist-packages/foghorn_sdk/retry_loop.py", line 46, in run_with_retry\n    raise ex\n', 'HTTPError: 404 Not Found: Response specification matching http status_code 404 not found for operation Operation(getTopics). Either add a response specification for the status_code or use a `default` response.\n']
