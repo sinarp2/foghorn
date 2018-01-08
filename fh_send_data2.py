@@ -1,11 +1,3 @@
-# TopicSubscriber.py
-# The information in these files is the proprietary and confidential information of Foghorn Systems, Inc., ("Foghorn").
-# Unless you have a valid license agreement with Foghorn, you may not access or use these files without the prior express written
-# consent of Foghorn.
-#
-# Copyright (c) 2016 FogHorn Systems, Inc. All rights reserved
-#
-
 import logging
 import os
 import signal
@@ -15,17 +7,11 @@ import time
 import requests
 
 from foghorn_sdk.health_status import HealthStatus
-
 from foghorn_sdk.fhapplication import FHApplication
 from foghorn_sdk.health_report import HealthReport
-from foghorn_sdk.new_configuration_event import NewConfigurationEvent
-from foghorn_sdk.system_event import SystemEvent
 from foghorn_sdk.fhclient import FHClient
 from foghorn_sdk.logger import Logger
-from foghorn_sdk.new_topic_event import NewTopicEvent
-from foghorn_sdk.schema_type import SchemaType
 from foghorn_sdk.topic_data_handler import TopicDataHandler
-from foghorn_sdk.system_event_handler import SystemEventHandler
 
 '''
 pip install requests
@@ -46,12 +32,12 @@ def post_data(data):
     try:
         res = requests.post(url=url, headers=headers,
                             data=data, timeout=15 * 60)
-        #Logger.get_logger().log_debug(res.text)
+        # print res.text
     except Exception as e:
         print e
 
 
-class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport, threading.Thread):
+class TopicSubscriber(FHApplication, TopicDataHandler, HealthReport, threading.Thread):
 
     __client_id = "com_acme_best_app_1"
     __app_id = '100.200-100-FF'
@@ -112,29 +98,6 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
     def get_health_data(self):
         return HealthStatus.running
 
-    def on_system_event(self, event):
-        """
-        on_system_event is the the implementation of the SystemEventHandler abstract class.
-        SDK calls this method when there is a new system event.
-        :param event: is the system event.
-        :return: nothing.
-        """
-        if isinstance(event, NewTopicEvent):
-            name = event.get_topic().get_name()
-            id_ = event.get_topic().get_id()
-            self.client.get_logger().log_debug(
-                "sample_app.on_system_event NewTopicEvent: " + name + "  " + id_)
-
-            # Subscribe to receive data from the new sensor.
-            sensors = [event.get_topic()]
-            self.client.add_topic_subscriber(sensors, self)
-        elif isinstance(event, NewConfigurationEvent):
-            self.client.get_logger().log_debug(
-                "sample_app.on_system_event NewConfigurationEvent")
-        elif isinstance(event, SystemEvent):
-            self.client.get_logger().log_debug("sample_app.on_system_event SystemEvent type = " + str(event.get_type()) +
-                                               " id = " + str(event.get_id()))
-
     def on_topic_data(self, topic_data):
         """
         on_topic_data is implementation of the TopicDataHandler abstract class.
@@ -162,122 +125,10 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
             try:
                 self.client.publish_data(self.topic, "hello world " + str(index))
                 index = index + 1
-                time.sleep(1)
+                time.sleep(10)
             except Exception as e:
                 self.client.get_logger().log_error("sample_app.run error: ", e)
                 break
-
-    def query_database(self):
-        """
-        query_database method is an example code on to connect to the local TSDB and
-        query data. In this example, it is assumed that a database with "FoghornSampleApp" name exist.
-        :return:
-        """
-        try:
-            # get the database
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-
-            # list the available databases.
-            dblist = tsdb.get_list_database()
-
-            if dblist is not None:
-                self.client.get_logger().log_debug("db count = " + str(len(dblist)))
-
-                # list series available in each database
-                for db in dblist:
-                    for key, dbname in db.iteritems():
-                        self.client.get_logger().log_debug("database name = " + str(dbname))
-                        if dbname == '_internal':
-                            continue
-
-                        measurements = tsdb.get_list_measurements(dbname)
-                        for measure in measurements:
-                            self.client.get_logger().log_debug("  measurement: " + str(measure))
-                            fields = tsdb.get_list_fields(measure, dbname)
-                            for field in fields:
-                                self.client.get_logger().log_debug("  field: " + str(field))
-
-                        series = tsdb.get_list_series(dbname)
-                        for serie in series:
-                            for key2, sname in serie.iteritems():
-                                if sname == self.__db_name:
-                                    result = tsdb.query(
-                                        "SELECT * FROM " + sname)
-                                    values = result.raw['series'][0]['values']
-                                    for item in values:
-                                        self.client.get_logger().log_debug("     " + str(item))
-        except Exception as e:
-            self.client.get_logger().log_debug("sample_app.query_database error: ", e)
-
-    def show_database_schema(self):
-        try:
-            # get the database object
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-
-            # list the available databases.
-            dblist = tsdb.get_list_database()
-
-            if dblist is not None:
-                self.client.get_logger().log_debug("db count = " + str(len(dblist)))
-
-                # list measurements and fields available in each database
-                for db in dblist:
-                    for key, dbname in db.iteritems():
-
-                        self.client.get_logger().log_debug("database name = " + str(dbname))
-
-                        tsdb.switch_database(str(dbname))
-
-                        # measurements
-                        measurements = tsdb.get_list_measurements(dbname)
-                        for measure in measurements:
-                            self.client.get_logger().log_debug("    measurement: " + str(measure))
-
-                            # fields for each measurement
-                            fields = tsdb.get_list_fields(measure)
-                            for field in fields:
-                                self.client.get_logger().log_debug("        field: " + str(field))
-        except Exception as e:
-            self.client.get_logger().log_error("create_database failed", e)
-
-    def create_database(self):
-        try:
-            # get the database object
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-            tsdb.create_database_with_rentention_policy(self.__db_name)
-        except Exception as e:
-            self.client.get_logger().log_error("create_database failed ", e)
-
-    def delete_database(self):
-        try:
-            # get the database object
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-            tsdb.drop_database(self.__db_name)
-        except Exception as e:
-            self.client.get_logger().log_error("delete_database failed ", e)
-
-    def write_database(self):
-        tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-        json_body = [
-            {
-                "measurement": "MyTable",
-                "tags": {
-                    "Vel_Version": "2.0"
-                },
-                "time": "2009-11-10T23:00:00Z",
-                "fields": {
-                    "pressure": 0.64,
-                    "temperature": 3.0,
-                }
-            }
-        ]
-        tsdb.write_points(json_body, database=self.__db_name)
-
-    def test_database(self):
-        self.create_database()
-        self.write_database()
-        self.query_database()
-        self.show_database_schema()
 
     def create_topic(self):
         """
