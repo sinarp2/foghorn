@@ -7,17 +7,9 @@ import requests
 import logging
 import threading
 
-from foghorn_sdk.health_status import HealthStatus
-from foghorn_sdk.fhapplication import FHApplication
-from foghorn_sdk.health_report import HealthReport
-from foghorn_sdk.new_configuration_event import NewConfigurationEvent
-from foghorn_sdk.system_event import SystemEvent
 from foghorn_sdk.fhclient import FHClient
 from foghorn_sdk.logger import Logger
-from foghorn_sdk.new_topic_event import NewTopicEvent
-from foghorn_sdk.schema_type import SchemaType
 from foghorn_sdk.topic_data_handler import TopicDataHandler
-from foghorn_sdk.system_event_handler import SystemEventHandler
 
 '''
 pip install requests
@@ -34,9 +26,8 @@ def post_data(url, data):
     except Exception as e:
         Logger.get_logger().log_debug('send data error:', e)
 
-class TopicSubscriber(FHApplication, TopicDataHandler, HealthReport):
+class TopicSubscriber(TopicDataHandler):
 
-    __client_id = "com_acme_best_app_1"
     __app_id = '100.200-100-FF'
     __app_name = 'com_acme_best_app_1'
     __app_author = 'acme'
@@ -152,8 +143,6 @@ class Datafile:
             'phase_c_curr_over': row[18]
         }
         post_data(self.__post_url, data)
-
-
 
 def main():
     Logger.path = os.getcwd() + "/sdk_log"
