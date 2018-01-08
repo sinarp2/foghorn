@@ -28,14 +28,13 @@ headers = {
 }
 
 def post_data(url, data):
-    print 'post data'
-    # try:
-    #     res = requests.post(url=url, headers=headers, data=data, timeout=15 * 60)
-    #     Logger.get_logger().log_debug(res.text)
-    # except Exception as e:
-    #     print Logger.get_logger().log_debug('send data error:', e)
+    try:
+        res = requests.post(url=url, headers=headers, data=data, timeout=15 * 60)
+        Logger.get_logger().log_debug(res.text)
+    except Exception as e:
+        Logger.get_logger().log_debug('send data error:', e)
 
-class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport, threading.Thread):
+class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport):
 
     __client_id = "com_acme_best_app_1"
     __app_id = '100.200-100-FF'
@@ -50,7 +49,6 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
         self.__post_url = post_url
         self.message_count_received = 0
         self.topic = None
-        threading.Thread.__init__(self)
 
         # create client
         self.client = FHClient(self)
@@ -72,9 +70,6 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
 
         # subscribe to topics
         self.client.add_topic_subscriber(self.topics, self)
-
-        self.daemon = True
-        self.start()
 
     def get_id(self):
         return self.__app_id
@@ -118,7 +113,7 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
             self.client.get_logger().log_debug("sample_app.on_system_event SystemEvent type = " + str(event.get_type()) +
                                                " id = " + str(event.get_id()))
 
-    def on_topic_data(self_, topic_data):
+    def on_topic_data(self, topic_data):
         """
         on_topic_data is implementation of the TopicDataHandler abstract class.
         SDK calls this method when there is a message (data) available for one
@@ -127,30 +122,16 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
         :return: nothing
         """
         name = topic_data.get_topic().get_name()
-        print self_
-        # if topic_data.get_data() is not None:
-        #     post_data(self.__post_url, str(topic_data.get_data()))
-        #     self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " plain data = " +
-        #                                        str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
-        # else:
-        #     post_data(self.__post_url, str(topic_data.get_raw_data()))
-        #     self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
-        #                                        str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
+        if topic_data.get_data() is not None:
+            post_data(self.__post_url, str(topic_data.get_data()))
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " plain data = " +
+                                               str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
+        else:
+            post_data(self.__post_url, str(topic_data.get_raw_data()))
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
+                                               str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
 
-        # self.message_count_received += 1
-
-    def run(self):
-
-        index = 0
-        while True:
-            try:
-                self.client.publish_data(
-                    self.topic, "hello world " + str(index))
-                index = index + 1
-                time.sleep(1)
-            except Exception as e:
-                self.client.get_logger().log_error("sample_app.run error: ", e)
-                break
+        self.message_count_received += 1
 
     def query_database(self):
         """
