@@ -23,7 +23,8 @@ from foghorn_sdk.system_event_handler import SystemEventHandler
 pip install requests
 '''
 
-class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport, threading.Thread):
+
+class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport, threading.Thread):
 
     __client_id = "com_acme_best_app_1"
     __app_id = '100.200-100-FF'
@@ -34,8 +35,8 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
     __db_passwd = ''
     __db_name = 'TestDb'
 
-    def __init__(self):
-
+    def __init__(self, post_url, topic_names):
+        self.__post_url = post_url
         self.message_count_received = 0
         self.topic = None
         threading.Thread.__init__(self)
@@ -48,7 +49,14 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
         self.client.subscribe_system_events(self)
 
         # get list of topics.
-        self.topics = self.client.get_topics()
+        self.topics = []
+        tmp = self.client.get_topics()
+        for topic in tmp:
+            for topic_name in topic_names:
+                if topic.get_name() == topic_name:
+                    self.topics.append(topic)
+                    break
+
         self.log_topics()
 
         # subscribe to topics
@@ -86,13 +94,15 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
         if isinstance(event, NewTopicEvent):
             name = event.get_topic().get_name()
             id_ = event.get_topic().get_id()
-            self.client.get_logger().log_debug("sample_app.on_system_event NewTopicEvent: " + name + "  " + id_)
+            self.client.get_logger().log_debug(
+                "sample_app.on_system_event NewTopicEvent: " + name + "  " + id_)
 
             # Subscribe to receive data from the new sensor.
-            sensors = [event.get_topic()];
+            sensors = [event.get_topic()]
             self.client.add_topic_subscriber(sensors, self)
         elif isinstance(event, NewConfigurationEvent):
-            self.client.get_logger().log_debug("sample_app.on_system_event NewConfigurationEvent")
+            self.client.get_logger().log_debug(
+                "sample_app.on_system_event NewConfigurationEvent")
         elif isinstance(event, SystemEvent):
             self.client.get_logger().log_debug("sample_app.on_system_event SystemEvent type = " + str(event.get_type()) +
                                                " id = " + str(event.get_id()))
@@ -107,9 +117,22 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
         """
         name = topic_data.get_topic().get_name()
         if topic_data.get_data() is not None:
-            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " + str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
+            post_data = topic_data.get_data()
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
+                                               str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
         else:
-            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " + str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
+            post_data.data = topic_data.get_raw_data()
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
+                                               str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
+        headers = {
+            'Content-type': 'application/x-www-form-urlencoded'
+        }
+        try:
+            res = requests.post(url=self.__post_url,
+                                headers=headers, data=post_data, timeout=15 * 60)
+            self.client.get_logger().log_debug(res.text)
+        except Exception as e:
+            self.client.get_logger().log_debug("post request error:", e)
 
         self.message_count_received += 1
 
@@ -118,7 +141,8 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
         index = 0
         while True:
             try:
-                self.client.publish_data(self.topic, "hello world " + str(index))
+                self.client.publish_data(
+                    self.topic, "hello world " + str(index))
                 index = index + 1
                 time.sleep(1)
             except Exception as e:
@@ -159,7 +183,8 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
                         for serie in series:
                             for key2, sname in serie.iteritems():
                                 if sname == self.__db_name:
-                                    result = tsdb.query("SELECT * FROM " + sname)
+                                    result = tsdb.query(
+                                        "SELECT * FROM " + sname)
                                     values = result.raw['series'][0]['values']
                                     for item in values:
                                         self.client.get_logger().log_debug("     " + str(item))
@@ -246,7 +271,8 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
             self.topic = self.client.get_topic(topic_id)
             if self.topic is None:
                 topic_schema = "{\"type\":\"number\"}"
-                self.topic = self.client.create_topic(topic_schema, SchemaType.JSON, topic_id)
+                self.topic = self.client.create_topic(
+                    topic_schema, SchemaType.JSON, topic_id)
         except Exception as e:
             self.client.get_logger().log_error("create_topic failed ", e)
 
@@ -254,17 +280,20 @@ class Subscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthRepo
         self.client.get_logger().log_debug("topic count = " + str(len(self.topics)))
         for index in range(len(self.topics)):
             topic = self.topics[index]
-            self.client.get_logger().log_debug("topic name = " + topic.get_name() + " id = " + str(topic.get_id()))
+            self.client.get_logger().log_debug(
+                "topic name = " + topic.get_name() + " id = " + str(topic.get_id()))
 
 
 class Datafile:
-    # __POST_ENDPOINT = 'http://charger.tetrapacific.com/api/api-collector.php'
-    __POST_URL = 'http://localhost:8001/post-to-me'
 
-    def __init__(self, filename):
+    def __init__(self, filename, post_url):
+        self.__post_url = post_url
         self.__file = open(filename, 'r')
         self.__reader = csv.reader(self.__file, delimiter=',', quotechar='|')
         self.__reader.next()
+        self.__logger = Logger.get_logger()
+        self.__logger.log_debug(
+            'Initialized Datafile Object [' + filename + ']')
 
     def __del__(self):
         if self.__file is None:
@@ -281,7 +310,7 @@ class Datafile:
 
     def post_data(self):
         row = self.__getline()
-        #print row
+        # print row
         data = {
             'charger_id': row[0],
             'gun_a_status': row[1],
@@ -307,9 +336,9 @@ class Datafile:
             'Content-type': 'application/x-www-form-urlencoded'
         }
         try:
-            res = requests.post(url=self.__POST_URL,
+            res = requests.post(url=self.__post_url,
                                 headers=headers, data=data, timeout=15 * 60)
-            #print res.text
+            self.__logger.log_debug(res.text)
         except Exception as e:
             print e
 
@@ -318,12 +347,19 @@ def main():
     Logger.path = os.getcwd() + "/sdk_log"
     Logger.log_level = logging.DEBUG
 
-    datafiles = []
-    datafiles.append(Datafile('upload-foghorn-ac-10022001.csv'))
-    datafiles.append(Datafile('upload-foghorn-dc-10011103.csv'))
-    datafiles.append(Datafile('upload-foghorn-dc-10021101.csv'))
+    # post_url = 'http://charger.tetrapacific.com/api/api-collector.php'
+    post_url = 'http://localhost:9000/post-to-me'
 
-    subs = Subscriber()
+    datafiles = []
+    datafiles.append(Datafile('upload-foghorn-ac-10022001.csv', post_url))
+    datafiles.append(Datafile('upload-foghorn-dc-10011103.csv', post_url))
+    datafiles.append(Datafile('upload-foghorn-dc-10021101.csv', post_url))
+
+    topics = ['/raw/mqtt/inlet_pressure',
+              '/raw/mqtt/temperature/decoded']
+
+    subs = TopicSubscriber(post_url, topics)
+
     while True:
         for datafile in datafiles:
             datafile.post_data()
