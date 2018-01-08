@@ -34,26 +34,21 @@ def post_data(url, data):
     except Exception as e:
         Logger.get_logger().log_debug('send data error:', e)
 
-class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport):
+class TopicSubscriber(FHApplication, TopicDataHandler, HealthReport):
 
     __client_id = "com_acme_best_app_1"
     __app_id = '100.200-100-FF'
     __app_name = 'com_acme_best_app_1'
     __app_author = 'acme'
     __app_version = '1.0'
-    __db_user = ''
-    __db_passwd = ''
-    __db_name = 'TestDb'
 
     def __init__(self, post_url, topic_names):
+
         self.__post_url = post_url
         self.message_count_received = 0
-        self.topic = None
 
         # create client
         self.client = FHClient(self)
-
-        self.create_topic()
 
         self.client.subscribe_system_events(self)
 
@@ -65,8 +60,6 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
                 if topic.get_name() == topic_name:
                     self.topics.append(topic)
                     break
-
-        self.log_topics()
 
         # subscribe to topics
         self.client.add_topic_subscriber(self.topics, self)
@@ -90,29 +83,6 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
     def get_health_data(self):
         return HealthStatus.running
 
-    def on_system_event(self, event):
-        """
-        on_system_event is the the implementation of the SystemEventHandler abstract class.
-        SDK calls this method when there is a new system event.
-        :param event: is the system event.
-        :return: nothing.
-        """
-        if isinstance(event, NewTopicEvent):
-            name = event.get_topic().get_name()
-            id_ = event.get_topic().get_id()
-            self.client.get_logger().log_debug(
-                "sample_app.on_system_event NewTopicEvent: " + name + "  " + id_)
-
-            # Subscribe to receive data from the new sensor.
-            sensors = [event.get_topic()]
-            self.client.add_topic_subscriber(sensors, self)
-        elif isinstance(event, NewConfigurationEvent):
-            self.client.get_logger().log_debug(
-                "sample_app.on_system_event NewConfigurationEvent")
-        elif isinstance(event, SystemEvent):
-            self.client.get_logger().log_debug("sample_app.on_system_event SystemEvent type = " + str(event.get_type()) +
-                                               " id = " + str(event.get_id()))
-
     def on_topic_data(self, topic_data):
         """
         on_topic_data is implementation of the TopicDataHandler abstract class.
@@ -130,142 +100,7 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
             post_data(self.__post_url, { name : str(topic_data.get_raw_data())} )
             self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " row data = " +
                                                str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
-
         self.message_count_received += 1
-
-    def query_database(self):
-        """
-        query_database method is an example code on to connect to the local TSDB and
-        query data. In this example, it is assumed that a database with "FoghornSampleApp" name exist.
-        :return:
-        """
-        try:
-            # get the database
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-
-            # list the available databases.
-            dblist = tsdb.get_list_database()
-
-            if dblist is not None:
-                self.client.get_logger().log_debug("db count = " + str(len(dblist)))
-
-                # list series available in each database
-                for db in dblist:
-                    for key, dbname in db.iteritems():
-                        self.client.get_logger().log_debug("database name = " + str(dbname))
-                        if dbname == '_internal':
-                            continue
-
-                        measurements = tsdb.get_list_measurements(dbname)
-                        for measure in measurements:
-                            self.client.get_logger().log_debug("  measurement: " + str(measure))
-                            fields = tsdb.get_list_fields(measure, dbname)
-                            for field in fields:
-                                self.client.get_logger().log_debug("  field: " + str(field))
-
-                        series = tsdb.get_list_series(dbname)
-                        for serie in series:
-                            for key2, sname in serie.iteritems():
-                                if sname == self.__db_name:
-                                    result = tsdb.query(
-                                        "SELECT * FROM " + sname)
-                                    values = result.raw['series'][0]['values']
-                                    for item in values:
-                                        self.client.get_logger().log_debug("     " + str(item))
-        except Exception as e:
-            self.client.get_logger().log_debug("sample_app.query_database error: ", e)
-
-    def show_database_schema(self):
-        try:
-            # get the database object
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-
-            # list the available databases.
-            dblist = tsdb.get_list_database()
-
-            if dblist is not None:
-                self.client.get_logger().log_debug("db count = " + str(len(dblist)))
-
-                # list measurements and fields available in each database
-                for db in dblist:
-                    for key, dbname in db.iteritems():
-
-                        self.client.get_logger().log_debug("database name = " + str(dbname))
-
-                        tsdb.switch_database(str(dbname))
-
-                        # measurements
-                        measurements = tsdb.get_list_measurements(dbname)
-                        for measure in measurements:
-                            self.client.get_logger().log_debug("    measurement: " + str(measure))
-
-                            # fields for each measurement
-                            fields = tsdb.get_list_fields(measure)
-                            for field in fields:
-                                self.client.get_logger().log_debug("        field: " + str(field))
-        except Exception as e:
-            self.client.get_logger().log_error("create_database failed", e)
-
-    def create_database(self):
-        try:
-            # get the database object
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-            tsdb.create_database_with_rentention_policy(self.__db_name)
-        except Exception as e:
-            self.client.get_logger().log_error("create_database failed ", e)
-
-    def delete_database(self):
-        try:
-            # get the database object
-            tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-            tsdb.drop_database(self.__db_name)
-        except Exception as e:
-            self.client.get_logger().log_error("delete_database failed ", e)
-
-    def write_database(self):
-        tsdb = self.client.get_database(self.__db_user, self.__db_passwd)
-        json_body = [
-            {
-                "measurement": "MyTable",
-                "tags": {
-                    "Vel_Version": "2.0"
-                },
-                "time": "2009-11-10T23:00:00Z",
-                "fields": {
-                    "pressure": 0.64,
-                    "temperature": 3.0,
-                }
-            }
-        ]
-        tsdb.write_points(json_body, database=self.__db_name)
-
-    def test_database(self):
-        self.create_database()
-        self.write_database()
-        self.query_database()
-        self.show_database_schema()
-
-    def create_topic(self):
-        """
-        Create a topic and publish some data.
-        :return:
-        """
-        try:
-            topic_id = "Foo-Python-100"
-            self.topic = self.client.get_topic(topic_id)
-            if self.topic is None:
-                topic_schema = "{\"type\":\"number\"}"
-                self.topic = self.client.create_topic(
-                    topic_schema, SchemaType.JSON, topic_id)
-        except Exception as e:
-            self.client.get_logger().log_error("create_topic failed ", e)
-
-    def log_topics(self):
-        self.client.get_logger().log_debug("topic count = " + str(len(self.topics)))
-        for index in range(len(self.topics)):
-            topic = self.topics[index]
-            self.client.get_logger().log_debug(
-                "topic name = " + topic.get_name() + " id = " + str(topic.get_id()))
 
 
 class Datafile:
