@@ -123,12 +123,12 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
         """
         name = topic_data.get_topic().get_name()
         if topic_data.get_data() is not None:
-            post_data(self.__post_url, str(topic_data.get_data()))
-            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " plain data = " +
+            post_data(self.__post_url, { name : str(topic_data.get_data())} )
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
                                                str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
         else:
-            post_data(self.__post_url, str(topic_data.get_raw_data()))
-            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
+            post_data(self.__post_url, { name : str(topic_data.get_raw_data())} )
+            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " row data = " +
                                                str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
 
         self.message_count_received += 1
@@ -333,7 +333,7 @@ def main():
     datafiles.append(Datafile('upload-foghorn-dc-10021101.csv', post_url))
 
     topics = ['/raw/mqtt/inlet_pressure',
-              '/raw/mqtt/temperature/decoded']
+              '/analytics/cavitation_data']
 
     subs = TopicSubscriber(post_url, topics)
 
