@@ -23,6 +23,17 @@ from foghorn_sdk.system_event_handler import SystemEventHandler
 pip install requests
 '''
 
+headers = {
+    'Content-type': 'application/x-www-form-urlencoded'
+}
+
+def post_data(url, data):
+    print 'post data'
+    # try:
+    #     res = requests.post(url=url, headers=headers, data=data, timeout=15 * 60)
+    #     Logger.get_logger().log_debug(res.text)
+    # except Exception as e:
+    #     print Logger.get_logger().log_debug('send data error:', e)
 
 class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, HealthReport, threading.Thread):
 
@@ -107,7 +118,7 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
             self.client.get_logger().log_debug("sample_app.on_system_event SystemEvent type = " + str(event.get_type()) +
                                                " id = " + str(event.get_id()))
 
-    def on_topic_data(self, topic_data):
+    def on_topic_data(self_, topic_data):
         """
         on_topic_data is implementation of the TopicDataHandler abstract class.
         SDK calls this method when there is a message (data) available for one
@@ -116,25 +127,17 @@ class TopicSubscriber(FHApplication, SystemEventHandler, TopicDataHandler, Healt
         :return: nothing
         """
         name = topic_data.get_topic().get_name()
-        if topic_data.get_data() is not None:
-            post_data = topic_data.get_data()
-            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
-                                               str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
-        else:
-            post_data.data = topic_data.get_raw_data()
-            self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
-                                               str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
-        headers = {
-            'Content-type': 'application/x-www-form-urlencoded'
-        }
-        try:
-            res = requests.post(url=self.__post_url,
-                                headers=headers, data=post_data, timeout=15 * 60)
-            self.client.get_logger().log_debug(res.text)
-        except Exception as e:
-            self.client.get_logger().log_debug("post request error:", e)
+        print self_
+        # if topic_data.get_data() is not None:
+        #     post_data(self.__post_url, str(topic_data.get_data()))
+        #     self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " plain data = " +
+        #                                        str(topic_data.get_data()) + " recevied = " + str(self.message_count_received))
+        # else:
+        #     post_data(self.__post_url, str(topic_data.get_raw_data()))
+        #     self.client.get_logger().log_debug("sample_app.on_topic_data name = " + name + " data = " +
+        #                                        str(topic_data.get_raw_data()) + " recevied = " + str(self.message_count_received))
 
-        self.message_count_received += 1
+        # self.message_count_received += 1
 
     def run(self):
 
@@ -332,15 +335,8 @@ class Datafile:
             'phase_b_curr_over': row[17],
             'phase_c_curr_over': row[18]
         }
-        headers = {
-            'Content-type': 'application/x-www-form-urlencoded'
-        }
-        try:
-            res = requests.post(url=self.__post_url,
-                                headers=headers, data=data, timeout=15 * 60)
-            self.__logger.log_debug(res.text)
-        except Exception as e:
-            print e
+        post_data(self.__post_url, data)
+
 
 
 def main():
